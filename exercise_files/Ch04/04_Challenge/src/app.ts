@@ -1,10 +1,12 @@
-function query<T>(
+function query<T extends { [TProperty in keyof T]?: T[TProperty] }>(
     items: T[],
-    query: any // <--- replace this!
+    query: {
+        [TProperty in keyof T]?: (val: T[TProperty]) => boolean
+    }
 ) {
     return items.filter(item => {
         // iterate through each of the item's properties
-        for (const property of Object.keys(item)) {
+        for (const property of Object.keys(item) as Array<keyof T>) {
 
             // get the query for this property name
             const propertyQuery = query[property]
